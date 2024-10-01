@@ -69,4 +69,4 @@ const stream = {
   },
 };
 
-export { logger, stream };
+module.exports = { logger, stream };
