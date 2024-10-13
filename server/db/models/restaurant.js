@@ -26,20 +26,9 @@ module.exports = sequelize.define(
     email: {
       type: Sequelize.STRING,
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-    },
-    deletedAt: {
-      type: Sequelize.DATE,
-    },
   },
   {
-    paranoid: true,
+    timestamps: true,
     freezeTableName: true,
     modelName: 'restaurant',
   },

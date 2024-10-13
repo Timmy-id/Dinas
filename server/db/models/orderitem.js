@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 const sequelize = require('../../config/database');
 
 module.exports = sequelize.define(
-  'menu',
+  'orderItem',
   {
     id: {
       type: Sequelize.UUID,
@@ -12,25 +12,33 @@ module.exports = sequelize.define(
       defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
-    name: {
+    orderId: {
       type: Sequelize.STRING,
       allowNull: false,
+      references: {
+        model: 'order',
+        key: 'id',
+      },
     },
-    price: {
-      type: Sequelize.FLOAT,
-      allowNull: false,
-    },
-    description: {
+    menuId: {
       type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'menu',
+        key: 'id',
+      },
     },
-    isAvailable: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: true,
+    quantity: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1,
+      },
     },
   },
   {
     timestamps: true,
     freezeTableName: true,
-    modelName: 'menu',
+    modelName: 'orderItem',
   },
 );

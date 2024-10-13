@@ -1,13 +1,8 @@
 const { Menu } = require('../../../db/models');
 
 const createMenu = async (req, res, next) => {
-  const { name, price, quantity } = req.body;
   try {
-    const newMenu = await Menu.create({
-      name,
-      price,
-      quantity,
-    });
+    const newMenu = await Menu.create(req.body);
 
     res.status(201).json({
       status: 'success',

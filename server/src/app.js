@@ -6,6 +6,7 @@ const { NotFoundError, ErrorHandler } = require('./middlewares');
 const menuRoutes = require('./api/menu');
 const tableRoutes = require('./api/table');
 const authRoutes = require('./api/auth');
+const orderRoutes = require('./api/order');
 
 const App = async () => {
   const app = express();
@@ -18,6 +19,7 @@ const App = async () => {
   app.use('/api/v1/menus', menuRoutes);
   app.use('/api/v1/tables', tableRoutes);
   app.use('/api/v1/auth', authRoutes);
+  app.use('/api/v1/orders', orderRoutes);
 
   app.all('*', NotFoundError);
   app.use(ErrorHandler);

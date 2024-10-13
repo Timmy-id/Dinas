@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 const sequelize = require('../../config/database');
 
 module.exports = sequelize.define(
-  'table',
+  'order',
   {
     id: {
       type: Sequelize.UUID,
@@ -12,18 +12,23 @@ module.exports = sequelize.define(
       defaultValue: Sequelize.UUIDV4,
       allowNull: false,
     },
-    tableNumber: {
-      type: Sequelize.INTEGER,
+    tableId: {
+      type: Sequelize.STRING,
       allowNull: false,
-      unique: true,
+      references: {
+        model: 'table',
+        key: 'id',
+      },
     },
-    qrCodeUrl: {
-      type: Sequelize.TEXT,
+    status: {
+      type: Sequelize.ENUM('pending', 'preparing', 'served'),
+      defaultValue: 'pending',
+      allowNull: false,
     },
   },
   {
     timestamps: true,
     freezeTableName: true,
-    modelName: 'table',
+    modelName: 'order',
   },
 );

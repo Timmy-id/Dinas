@@ -1,10 +1,10 @@
 const { Table, Menu } = require('../../../db/models');
-const { AppError } = require('../../utils');
+const { AppError, generateQRCode } = require('../../utils');
 
 const createTable = async (req, res, next) => {
-  const { name } = req.body;
+  const { tableNumber } = req.body;
   try {
-    const newTable = await Table.create({ name });
+    const newTable = await Table.create({ tableNumber });
 
     res.status(201).json({
       status: 'success',
@@ -16,13 +16,37 @@ const createTable = async (req, res, next) => {
   }
 };
 
-const getAllTables = async (req, res, next) => {
+const generateQRForTable = async (req, res, next) => {
+  const { tableId } = req.params;
+
+  try {
+    const table = await Table.findByPk(tableId);
+
+    if (!table) {
+      throw new AppError(404, `Table with id ${tableId} not found`);
+    }
+
+    const qrCodeUrl = await generateQRCode(table.id);
+    table.qrCodeUrl = qrCodeUrl;
+    await table.save();
+
+    res.status(201).json({
+      status: 'success',
+      message: 'QR code generated for table successfully.',
+      table,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getAllTables = async (_req, res, next) => {
   try {
     const tables = await Table.findAll({});
 
     res.status(200).json({
       status: 'success',
-      message: 'All tables retrieved successfullys',
+      message: 'All tables retrieved successfully',
       data: tables,
     });
   } catch (error) {
@@ -57,4 +81,9 @@ const addMenuToTable = async (req, res, next) => {
   }
 };
 
-module.exports = { createTable, getAllTables, addMenuToTable };
+module.exports = {
+  createTable,
+  getAllTables,
+  generateQRForTable,
+  addMenuToTable,
+};
