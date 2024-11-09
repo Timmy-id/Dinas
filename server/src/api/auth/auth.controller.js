@@ -1,22 +1,15 @@
 const bcrypt = require('bcryptjs');
-const { AppError, generateToken } = require('../../utils');
+const {
+  AppError,
+  generateAccessToken,
+  generateRefreshToken,
+} = require('../../utils');
 const { User } = require('../../../db/models');
 
 const registerUser = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, restaurantName, phone, email, password } = req.body;
 
   try {
-    if (!username || !email || !password) {
-      throw new AppError(400, 'Please enter the required fields');
-    }
-
-    if (password.length < 6 || password.length > 12) {
-      throw new AppError(
-        400,
-        'Password cannot be less than 6 characters or more than 12 characters',
-      );
-    }
-
     const user = await User.findOne({ where: { email } });
 
     if (user) {
@@ -30,12 +23,14 @@ const registerUser = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      restaurantName,
+      phone,
     });
 
     res.status(201).json({
       status: 'success',
       message: 'User registered successfully.',
-      data: newUser,
+      data: newUser.getUser,
     });
   } catch (error) {
     return next(error);
@@ -62,18 +57,19 @@ const loginUser = async (req, res, next) => {
       throw new AppError(400, 'Invalid email or password');
     }
 
-    const accessToken = generateToken(user.id);
+    const accessToken = generateAccessToken(user.id, user.role);
+    const refreshToken = generateRefreshToken(user.id);
 
-    res.cookie('accessToken', accessToken, {
+    res.cookie('refreshToken', refreshToken, {
       path: '/',
       httpOnly: true,
-      expires: new Date(Date.now() + 1000 * 56400),
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
       status: 'success',
       message: 'User logged in successfully.',
-      data: user.getUser,
+      data: accessToken,
     });
   } catch (error) {
     return next(error);

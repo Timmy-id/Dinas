@@ -13,11 +13,14 @@ import {
   FaTruck,
 } from 'react-icons/fa6';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Analytics from './Analytics';
-import Inventory from './Inventory';
+import Inventory from '../../Menu/components/Menu';
 
 const DashboardPage = () => {
   const [active, setActive] = useState('Analytics');
+
+  const navigate = useNavigate();
 
   const sections = [
     { label: 'Analytics', icon: <FaChartLine /> },

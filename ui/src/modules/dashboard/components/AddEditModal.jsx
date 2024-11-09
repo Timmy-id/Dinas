@@ -9,6 +9,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTrigger,
+  DialogActionTrigger,
 } from '../../../components/ui/dialog';
 import { Checkbox } from '../../../components/ui/checkbox';
 
@@ -45,6 +46,10 @@ const AddEditModal = ({
     setChecked(!!e.checked);
   };
 
+  const handleOpenModal = () => {
+    setSelectedItem();
+  };
+
   const handleSubmit = () => {
     if (selectedItem) {
       onEdit(item);
@@ -61,11 +66,6 @@ const AddEditModal = ({
 
   return (
     <DialogRoot>
-      <DialogTrigger asChild>
-        <Button colorScheme='teal' mb={4}>
-          Add Item
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           {selectedItem ? 'Edit Item' : 'Add Item'}
@@ -94,7 +94,7 @@ const AddEditModal = ({
               <Input
                 name='price'
                 type='number'
-                step='0.01'
+                step='100'
                 value={item.price}
                 onChange={handleChange}
                 placeholder='Enter price'
@@ -110,12 +110,18 @@ const AddEditModal = ({
           </VStack>
         </DialogBody>
         <DialogFooter>
-          <Button colorScheme='blue' mr={3} onClick={handleSubmit}>
+          <Button colorPalette='blue' mr={3} onClick={handleSubmit}>
             {selectedItem ? 'Save Changes' : 'Add Item'}
           </Button>
-          <Button variant='ghost' onClick={onClose}>
-            Cancel
-          </Button>
+          <DialogActionTrigger>
+            <Button
+              colorPalette='red'
+              variant='ghost'
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+          </DialogActionTrigger>
         </DialogFooter>
         <DialogCloseTrigger />
       </DialogContent>

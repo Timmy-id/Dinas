@@ -1,15 +1,14 @@
 import { useState } from 'react';
-import {
-  Box,
-  Table,
-  Heading,
-  IconButton,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Table, Heading, IconButton } from '@chakra-ui/react';
+import { Checkbox } from '../../../components/ui/checkbox';
+import { Button } from '../../../components/ui/button';
 import { FaPen, FaTrash } from 'react-icons/fa6';
-import AddEditModal from './AddEditModal';
+import AddEditModal from '../../dashboard/components/AddEditModal';
+import Modal from '../../../components/common/Modal';
+import { DialogTrigger } from '../../../components/ui/dialog';
+import MenuForm from './MenuForm';
 
-const Inventory = () => {
+const Menu = () => {
   const [items, setItems] = useState([
     {
       id: 1,
@@ -27,7 +26,7 @@ const Inventory = () => {
     },
   ]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { openDialog, setOpenDialog } = useState(false);
 
   // CRUD Handlers
   const handleAdd = (item) => {
@@ -49,16 +48,22 @@ const Inventory = () => {
     onOpen();
   };
 
+  const handleOpenModal = (e) => {
+    setOpenDialog(e.openDialog);
+  };
+
   return (
     <Box p={6}>
       <Heading mb={6}>Inventory Management</Heading>
-      <AddEditModal
-        isOpen={isOpen}
-        onClose={onClose}
-        onAdd={handleAdd}
-        onEdit={handleEdit}
+      <Modal
+        title={'Add Menu'}
+        handleSubmit={handleAdd}
         selectedItem={selectedItem}
-      />
+        openDialog={openDialog}
+        setOpenDialog={handleOpenModal}
+      >
+        <MenuForm />
+      </Modal>
 
       <Table.Root
         variant='simple'
@@ -80,7 +85,15 @@ const Inventory = () => {
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.description}</Table.Cell>
               <Table.Cell>{item.price}</Table.Cell>
-              <Table.Cell>{item.isAvailable}</Table.Cell>
+              <Table.Cell>
+                {item.isAvailable ? (
+                  <Checkbox checked disabled>
+                    {item.isAvailable}
+                  </Checkbox>
+                ) : (
+                  <Checkbox disabled>{item.isAvailable}</Checkbox>
+                )}
+              </Table.Cell>
               <Table.Cell>
                 <IconButton
                   mr={2}
@@ -106,4 +119,4 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default Menu;

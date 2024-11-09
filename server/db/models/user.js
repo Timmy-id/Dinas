@@ -14,11 +14,20 @@ module.exports = sequelize.define(
     },
     username: {
       type: Sequelize.STRING,
-      unique: true,
       allowNull: false,
       validate: {
         notNull: {
           msg: 'Please enter your username',
+        },
+      },
+    },
+    restaurantName: {
+      type: Sequelize.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'Please enter the name of your restaurant',
         },
       },
     },
@@ -32,9 +41,15 @@ module.exports = sequelize.define(
     },
     password: {
       type: Sequelize.STRING,
+      allowNull: false,
+    },
+    phone: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     role: {
       type: Sequelize.STRING,
+      defaultValue: 'Admin',
     },
     getUser: {
       type: DataTypes.VIRTUAL,
@@ -43,6 +58,8 @@ module.exports = sequelize.define(
           id: this.id,
           username: this.username,
           email: this.email,
+          restaurantName: this.restaurantName,
+          phone: this.phone,
         };
       },
     },
