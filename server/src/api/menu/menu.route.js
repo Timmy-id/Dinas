@@ -14,7 +14,7 @@ const router = express.Router();
 router.post('/', AuthToken, upload.single('imageUrl'), createMenu);
 router.get('/', AuthToken, Pagination, getAllMenus);
 router.get('/:menuId', AuthToken, getMenu);
-router.delete('/:menuId', deleteMenu);
-router.patch('/:menuId', updateMenu);
+router.delete('/:menuId', AuthToken, deleteMenu);
+router.patch('/:menuId', AuthToken, updateMenu);
 
 module.exports = router;
