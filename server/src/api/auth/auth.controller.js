@@ -41,23 +41,19 @@ const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    if (!email || !password) {
-      throw new AppError(400, 'Invalid email or password');
-    }
-
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      throw new AppError(400, 'Invalid email or password');
+      throw new AppError(400, 'Invalid credentials');
     }
 
     const isPassword = await bcrypt.compare(password, user.password);
 
     if (!isPassword) {
-      throw new AppError(400, 'Invalid email or password');
+      throw new AppError(400, 'Invalid ecredentials');
     }
 
-    const accessToken = generateAccessToken(user.id, user.role);
+    const accessToken = generateAccessToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
     res.cookie('refreshToken', refreshToken, {
