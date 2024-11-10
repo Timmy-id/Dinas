@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Input, VStack } from '@chakra-ui/react';
 import { Field } from '../../components/ui/field';
 import { Checkbox } from '../../components/ui/checkbox';
@@ -11,59 +11,39 @@ import {
   DialogTitle,
 } from '../../components/ui/dialog';
 import { Button } from '../../components/ui/button';
+import { useMenuStore } from '../../store/menuStore';
 
 const MenuForm = (props) => {
-  const { onAdd, onEdit, selectedItem } = props;
-
-  const [item, setItem] = useState({
-    name: '',
-    quantity: '',
-    price: '',
+  const { menu = {}, onClose } = props;
+  const { createMenu, updateMenu } = useMenuStore();
+  const [menuForm, setMenuForm] = useState({
+    name: menu.name || '',
+    description: menu.description || '',
+    price: menu.price || '',
+    isAvailable: menu.isAvailable || true,
   });
-  const [checked, setChecked] = useState(true);
 
-  useEffect(() => {
-    if (selectedItem) {
-      setItem(selectedItem);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (menu.id) {
+      updateMenu(menu.id, menuForm);
     } else {
-      setItem({
-        name: '',
-        description: '',
-        price: '',
-        isAvailable: true,
-      });
+      createMenu(menuForm);
     }
-  }, [selectedItem]);
-
-  // const handleAdd = (item) => {
-  //   setItems([...items, { ...item, id: items.length + 1 }]);
-  // };
+    onClose();
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setItem({ ...item, [name]: value });
-    setChecked(!!e.checked);
-  };
 
-  const handleSubmit = () => {
-    if (selectedItem) {
-      onEdit(item);
-    } else {
-      onAdd(item);
-    }
-    setItem({
-      name: '',
-      description: '',
-      price: '',
-      isAvailable: true,
-    });
+    setMenuForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   return (
     <DialogContent>
       <DialogHeader>
         <DialogTitle>
-          {selectedItem ? 'Edit Menu' : 'Add Menu'}
+          {menu.id ? 'Edit Menu' : 'Add Menu'}
         </DialogTitle>
       </DialogHeader>
       <DialogBody>
@@ -72,7 +52,7 @@ const MenuForm = (props) => {
             <Input
               name='name'
               placeholder='Enter item name'
-              value={item.name}
+              value={menuForm.name}
               onChange={handleChange}
             />
           </Field>
@@ -81,7 +61,7 @@ const MenuForm = (props) => {
             <Input
               name='description'
               placeholder='Enter description'
-              value={item.description}
+              value={menuForm.description}
               onChange={handleChange}
             />
           </Field>
@@ -89,14 +69,13 @@ const MenuForm = (props) => {
           <Field label='Price' required>
             <Input
               name='price'
-              type='number'
-              step='100'
               placeholder='Enter price'
-              value={item.price}
+              value={menuForm.price}
               onChange={handleChange}
             />
             <Checkbox
-              checked={checked}
+              name='isAvailable'
+              checked={menuForm.isAvailable}
               variant='solid'
               onCheckedChange={handleChange}
             >
@@ -110,7 +89,7 @@ const MenuForm = (props) => {
           <Button variant='outline'>Cancel</Button>
         </DialogActionTrigger>
         <Button onClick={handleSubmit}>
-          {selectedItem ? 'Save' : 'Add'}
+          {menu.id ? 'Save' : 'Add'} Menu
         </Button>
       </DialogFooter>
     </DialogContent>

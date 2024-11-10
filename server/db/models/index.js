@@ -5,6 +5,8 @@ const User = require('./user');
 const Order = require('./order');
 const OrderItem = require('./orderitem');
 
+User.hasMany(Menu, { foreignKey: 'userId', as: 'menus' });
+Menu.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 Table.hasMany(Order, { foreignKey: 'tableId' });
 Menu.hasMany(OrderItem, { foreignKey: 'menuId' });
 Order.belongsTo(Table, { foreignKey: 'tableId' });

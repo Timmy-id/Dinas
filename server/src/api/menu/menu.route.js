@@ -1,5 +1,5 @@
 const express = require('express');
-const { Pagination } = require('../../middlewares');
+const { Pagination, AuthToken } = require('../../middlewares');
 const {
   createMenu,
   getMenu,
@@ -7,12 +7,13 @@ const {
   deleteMenu,
   updateMenu,
 } = require('./menu.controller');
+const { upload } = require('../../utils');
 
 const router = express.Router();
 
-router.post('/', createMenu);
-router.get('/', Pagination, getAllMenus);
-router.get('/:menuId', getMenu);
+router.post('/', AuthToken, upload.single('imageUrl'), createMenu);
+router.get('/', AuthToken, Pagination, getAllMenus);
+router.get('/:menuId', AuthToken, getMenu);
 router.delete('/:menuId', deleteMenu);
 router.patch('/:menuId', updateMenu);
 

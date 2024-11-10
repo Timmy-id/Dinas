@@ -184,7 +184,7 @@ const Dashboard = () => {
             </Stack>
           </Stack>
         </Box>
-        <Box>
+        <Box overflow='auto'>
           <Stack h='full'>
             <Box>Top</Box>
             <Center flex='1'>

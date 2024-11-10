@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Table, Heading, IconButton } from '@chakra-ui/react';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Tooltip } from '../../components/ui/tooltip';
@@ -7,35 +7,20 @@ import {
   DialogRoot,
 } from '../../components/ui/dialog';
 import { FaPen, FaTrash, FaPlus } from 'react-icons/fa6';
+import { useMenuStore } from '../../store/menuStore';
 import MenuForm from './MenuForm';
 
 const Menu = () => {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      name: 'Fried Rice',
-      description: 'A very good meal',
-      price: 1.5,
-      isAvailable: true,
-    },
-    {
-      id: 2,
-      name: 'Jollof Rice',
-      description: 'A very good meal',
-      price: 2.5,
-      isAvailable: false,
-    },
-  ]);
+  const { menus, fetchMenus } = useMenuStore();
 
-  const [selectedItem, setSelectedItem] = useState(null);
+  useEffect(() => {
+    fetchMenus();
+  }, [fetchMenus]);
 
-  const handleEdit = (item) => {
-    setItems(items.map((i) => (i.id === item.id ? item : i)));
-  };
+  const [editMenu, setEditMenu] = useState(null);
 
-  const handleDelete = (id) => {
-    setItems(items.filter((item) => item.id !== id));
-  };
+  const openEditForm = (menu) => setEditMenu(menu);
+  const closeForm = () => setEditMenu(null);
 
   return (
     <Box p={6}>
@@ -81,7 +66,7 @@ const Menu = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {items.map((item) => (
+          {menus.map((item) => (
             <Table.Row key={item.id}>
               <Table.Cell>{item.name}</Table.Cell>
               <Table.Cell>{item.description}</Table.Cell>
@@ -99,14 +84,13 @@ const Menu = () => {
                 <IconButton
                   mr={2}
                   colorPalette='blue'
-                  onClick={() => handleEdit(item)}
                   aria-label='Edit Item'
+                  onClick={() => {}}
                 >
                   <FaPen />
                 </IconButton>
                 <IconButton
                   colorPalette='red'
-                  onClick={() => handleDelete(item.id)}
                   aria-label='Delete Item'
                 >
                   <FaTrash />

@@ -17,8 +17,21 @@ module.exports = sequelize.define(
       allowNull: false,
     },
     price: {
-      type: Sequelize.FLOAT,
+      type: Sequelize.INTEGER,
       allowNull: false,
+    },
+    imageUrl: {
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: '',
+    },
+    userId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'user',
+        key: 'id',
+      },
     },
     description: {
       type: Sequelize.STRING,

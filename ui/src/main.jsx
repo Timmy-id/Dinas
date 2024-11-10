@@ -13,6 +13,7 @@ import SignUpForm from './pages/auth/Signup.jsx';
 import SignInForm from './pages/auth/Signin.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
+import MenuList from './pages/menus/MenuList.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/menus',
-        element: <div>Menu</div>,
+        element: <MenuList />,
       },
       {
         path: '/tables',
