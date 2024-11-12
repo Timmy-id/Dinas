@@ -33,6 +33,14 @@ module.exports = sequelize.define(
         key: 'id',
       },
     },
+    tableId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'table',
+        key: 'id',
+      },
+    },
     description: {
       type: Sequelize.STRING,
     },

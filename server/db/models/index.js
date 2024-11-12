@@ -7,6 +7,10 @@ const OrderItem = require('./orderitem');
 
 User.hasMany(Menu, { foreignKey: 'userId', as: 'menus' });
 Menu.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+User.hasMany(Table, { foreignKey: 'userId', as: 'tables' });
+Table.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+Table.hasMany(Menu, { foreignKey: 'tableId', as: 'menus' });
+Menu.belongsTo(Table, { foreignKey: 'tableId', as: 'table' });
 Table.hasMany(Order, { foreignKey: 'tableId' });
 Menu.hasMany(OrderItem, { foreignKey: 'menuId' });
 Order.belongsTo(Table, { foreignKey: 'tableId' });

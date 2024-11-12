@@ -15,10 +15,17 @@ module.exports = sequelize.define(
     tableNumber: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      unique: true,
     },
     qrCodeUrl: {
       type: Sequelize.TEXT,
+    },
+    userId: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      references: {
+        model: 'user',
+        key: 'id',
+      },
     },
   },
   {
