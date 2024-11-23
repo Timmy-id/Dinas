@@ -37,8 +37,16 @@ const router = createBrowserRouter([
         element: <MenuList />,
       },
       {
+        path: '/orders',
+        element: <div>Orders</div>,
+      },
+      {
         path: '/tables',
-        element: <div>Table</div>,
+        element: <div>Tables</div>,
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />,
       },
       {
         path: '*',
@@ -47,7 +55,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/dashboard',
+    path: '/',
     element: (
       <ProtectedRoute>
         <Dashboard />
